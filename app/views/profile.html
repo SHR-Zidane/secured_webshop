@@ -19,12 +19,10 @@
         <div class="container">
             <div class="profile-card">
 
-                <!-- Photo de profil -->
                 <div id="photo-container">
                     <div class="profile-photo-placeholder" id="photo-placeholder">👤</div>
                 </div>
 
-                <!-- Informations de base -->
                 <div id="user-info">
                     <div class="info-row"><strong>Nom :</strong> <span id="username">...</span></div>
                     <div class="info-row"><strong>Email :</strong> <span id="email">...</span></div>
@@ -33,10 +31,8 @@
 
                 <hr>
 
-                <!-- Message de statut -->
                 <div class="message" id="status-message"></div>
 
-                <!-- Formulaire de mise à jour de l'adresse -->
                 <form id="address-form">
                     <div class="form-group">
                         <label for="address">Adresse</label>
@@ -47,7 +43,6 @@
 
                 <hr>
 
-                <!-- Formulaire d'upload de photo -->
                 <form id="photo-form">
                     <div class="form-group">
                         <label for="photo">Photo de profil</label>
@@ -68,9 +63,7 @@
 
     <script src="/js/nav.js"></script>
     <script>
-        // ------------------------------------------------------------------
-        // Chargement du profil au démarrage
-        // ------------------------------------------------------------------
+
         async function loadProfile() {
             const res = await fetch('/api/profile');
             if (!res.ok) return;
@@ -91,9 +84,6 @@
             infoDiv.innerHTML += `<div class="info-row"><strong>Adresse :</strong> ${user.address || ''}</div>`;
         }
 
-        // ------------------------------------------------------------------
-        // Mise à jour de l'adresse
-        // ------------------------------------------------------------------
         document.getElementById('address-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const address = document.getElementById('address').value;
@@ -109,9 +99,7 @@
             if (res.ok) loadProfile();
         });
 
-        // ------------------------------------------------------------------
-        // Upload de la photo
-        // ------------------------------------------------------------------
+
         document.getElementById('photo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const file = document.getElementById('photo').files[0];
