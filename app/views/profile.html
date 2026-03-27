@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <div id="topbar"></div>
-
     <main>
-        <section class="hero">
+        <section class="profile-header">
             <div class="container">
                 <h1>Mon Profil</h1>
             </div>
@@ -20,7 +18,7 @@
             <div class="profile-card">
 
                 <div id="photo-container">
-                    <div class="profile-photo-placeholder" id="photo-placeholder">👤</div>
+                    <div class="profile-photo-placeholder" id="photo-placeholder">photo</div>
                 </div>
 
                 <div id="user-info">
@@ -62,67 +60,6 @@
     </footer>
 
     <script src="/js/nav.js"></script>
-    <script>
-
-        async function loadProfile() {
-            const res = await fetch('/api/profile');
-            if (!res.ok) return;
-            const user = await res.json();
-
-            document.getElementById('username').textContent = user.username;
-            document.getElementById('email').textContent    = user.email;
-            document.getElementById('role').textContent     = user.role;
-
-            document.getElementById('address').value = user.address || '';
-
-            const photoContainer = document.getElementById('photo-container');
-            if (user.photo_path) {
-                photoContainer.innerHTML = `<img class="profile-photo" src="${user.photo_path}" alt="Photo de profil">`;
-            }
-
-            const infoDiv = document.getElementById('user-info');
-            infoDiv.innerHTML += `<div class="info-row"><strong>Adresse :</strong> ${user.address || ''}</div>`;
-        }
-
-        document.getElementById('address-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const address = document.getElementById('address').value;
-
-            const res = await fetch('/api/profile', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ address })
-            });
-
-            const data = await res.json();
-            showMessage(res.ok ? 'success' : 'error', data.message || data.error);
-            if (res.ok) loadProfile();
-        });
-
-
-        document.getElementById('photo-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const file = document.getElementById('photo').files[0];
-            if (!file) return showMessage('error', 'Aucun fichier sélectionné');
-
-            const formData = new FormData();
-            formData.append('photo', file);
-
-            const res = await fetch('/api/profile/photo', { method: 'POST', body: formData });
-            const data = await res.json();
-            showMessage(res.ok ? 'success' : 'error', data.message || data.error);
-            if (res.ok) loadProfile();
-        });
-
-        function showMessage(type, text) {
-            const el = document.getElementById('status-message');
-            el.textContent = text;
-            el.className = 'message ' + type;
-            el.style.display = 'block';
-            setTimeout(() => { el.style.display = 'none'; }, 4000);
-        }
-
-        loadProfile();
-    </script>
+    
 </body>
 </html>

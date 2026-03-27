@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <div id="topbar"></div>
 
     <main>
-        <section class="hero">
+        <section class="laplaya">
             <div class="container">
                 <h1>Connexion</h1>
                 <form id="loginForm" class="form" novalidate>
@@ -29,7 +28,7 @@
                         <a href="/register" class="btn-link">S'inscrire</a>
                     </div>
 
-                    <p id="errorMsg" class="error" aria-live="polite"></p>
+                    <p id="errorMsg" class="error"></p>
                 </form>
             </div>
         </section>
@@ -42,57 +41,6 @@
     </footer>
 
     <script src="/js/nav.js"></script>
-    <script>
-        (function () {
-            const form = document.getElementById('loginForm');
-            const errorEl = document.getElementById('errorMsg');
-            const submitBtn = document.getElementById('submitBtn');
-
-            if (!form) return;
-
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                errorEl.textContent = '';
-
-                const email = document.getElementById('email').value.trim();
-                const password = document.getElementById('password').value;
-
-                if (!email || !password) {
-                    errorEl.textContent = 'Veuillez remplir tous les champs.';
-                    return;
-                }
-
-                submitBtn.disabled = true;
-                const originalLabel = submitBtn.textContent;
-                submitBtn.textContent = 'Connexion...';
-
-                try {
-                    const res = await fetch('/api/auth/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password })
-                    });
-
-                    const data = await res.json().catch(() => ({}));
-
-                    if (!res.ok) {
-                        errorEl.textContent = data.error || 'Erreur lors de la connexion.';
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = originalLabel;
-                        return;
-                    }
-
-                    // Sauvegarde optionnelle et redirection
-                    try { localStorage.setItem('user', JSON.stringify(data.user)); } catch (err) { /* ignore */ }
-                    window.location.href = '/profile';
-
-                } catch (err) {
-                    errorEl.textContent = 'Impossible de contacter le serveur.';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = originalLabel;
-                }
-            });
-        })();
-    </script>
+    <script src="/js/login.js"></script>
 </body>
 </html>
