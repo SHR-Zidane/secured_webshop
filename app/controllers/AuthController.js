@@ -1,10 +1,28 @@
 const db = require('../config/db');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+
+const PEPPER = process.env.PEPPER || 'default_pePPER_unsafe';
+
+async function hashPassword(password) {
+    const pepperedPwd = crypto.createHmac('sha512', PEPPER).update(password).digest('hex');
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(pepperedPwd, salt);
+    return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, stored) {
+    try {
+        const [salt, hash] = stored.split(':');
+        const pepperedPwd = crypto.createHmac('sha512', PEPPER).update(password).digest('hex');
+        return bcrypt.compareSync(pepperedPwd, hash);
+    } catch {
+        return false;
+    }
+}
 
 module.exports = {
 
-    // ----------------------------------------------------------
-    // POST /api/auth/login
-    // ----------------------------------------------------------
     login: (req, res) => {
         const { email, password } = req.body;
 
@@ -12,25 +30,53 @@ module.exports = {
             return res.status(400).json({ error: 'Email et mot de passe requis' });
         }
 
-        const query = `SELECT * FROM users WHERE email = '${email}' AND password = '${password}'`;
-
-        db.query(query, (err, results) => {
+        db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
             if (err) {
-                return res.status(500).json({ error: err.message, query: query });
+                return res.status(500).json({ error: err.message });
             }
 
             if (results.length === 0) {
                 return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
             }
 
-            res.json({ message: 'Connexion réussie', user: results[0] });
+            const user = results[0];
+            if (!verifyPassword(password, user.password)) {
+                return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+            }
+
+            res.json({ message: 'Connexion réussie', user: { id: user.id, username: user.username, email: user.email, role: user.role } });
         });
     },
 
-    // ----------------------------------------------------------
-    // POST /api/auth/register
-    // ----------------------------------------------------------
-    register: (_req, res) => {
-        res.status(501).json({ error: 'Non implémenté — TODO exercice 7' });
+    register: async (req, res) => {
+        const { username, email, password } = req.body;
+
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'Tous les champs sont requis' });
+        }
+
+        if (password.length < 8) {
+            return res.status(400).json({ error: 'Le mot de passe doit faire au moins 8 caractères' });
+        }
+
+        try {
+            const hashedPassword = await hashPassword(password);
+            db.query(
+                'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
+                [username, email, hashedPassword, 'user'],
+                (err, results) => {
+                    if (err) {
+                        if (err.code === 'ER_DUP_ENTRY') {
+                            return res.status(409).json({ error: 'Email déjà utilisé' });
+                        }
+                        return res.status(500).json({ error: err.message });
+                    }
+
+                    res.status(201).json({ message: 'Inscription réussie', userId: results.insertId });
+                }
+            );
+        } catch (err) {
+            res.status(500).json({ error: 'Erreur lors du hashage' });
+        }
     }
 };
