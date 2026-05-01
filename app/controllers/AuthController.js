@@ -1,8 +1,12 @@
 const db = require('../config/db');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const PEPPER = process.env.PEPPER || 'default_pePPER_unsafe';
+const JWT_SECRET = process.env.JWT_SECRET || 'scrt-key';
+const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '24h';
+//-----------------------------------------------------------------------------------------------
 
 async function hashPassword(password) {
     const pepperedPwd = crypto.createHmac('sha512', PEPPER).update(password).digest('hex');
@@ -10,6 +14,7 @@ async function hashPassword(password) {
     const hash = await bcrypt.hash(pepperedPwd, salt);
     return `${salt}:${hash}`;
 }
+//-----------------------------------------------------------------------------------------------
 
 function verifyPassword(password, stored) {
     try {
@@ -19,6 +24,15 @@ function verifyPassword(password, stored) {
     } catch {
         return false;
     }
+}
+
+//-----------------------------------------------------------------------------------------------
+function generateToken(user) {
+    return jwt.sign(
+        { id: user.id, username: user.username, email: user.email, role: user.role },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRATION }
+    );
 }
 
 module.exports = {
@@ -44,7 +58,19 @@ module.exports = {
                 return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
             }
 
-            res.json({ message: 'Connexion réussie', user: { id: user.id, username: user.username, email: user.email, role: user.role } });
+            // Générer le token JWT
+            const token = generateToken(user);
+
+            res.json({
+                message: 'Connexion réussie',
+                token: token,
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                }
+            });
         });
     },
 
@@ -72,7 +98,22 @@ module.exports = {
                         return res.status(500).json({ error: err.message });
                     }
 
-                    res.status(201).json({ message: 'Inscription réussie', userId: results.insertId });
+                    // Créer un utilisateur temporaire pour générer le token
+                    const newUser = {
+                        id: results.insertId,
+                        username: username,
+                        email: email,
+                        role: 'user'
+                    };
+
+                    const token = generateToken(newUser);
+
+                    res.status(201).json({
+                        message: 'Inscription réussie',
+                        userId: results.insertId,
+                        token: token,
+                        user: newUser
+                    });
                 }
             );
         } catch (err) {

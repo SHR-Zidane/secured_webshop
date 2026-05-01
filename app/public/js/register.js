@@ -39,8 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json().catch(() => ({}));
 
                 if (res.ok) {
-                    alert('Inscription réussie ! Veuillez vous connecter.');
-                    window.location.href = '/login';
+                    try {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                    } catch (err) {
+                        console.error('Erreur lors du stockage du token:', err);
+                    }
+                    alert('Inscription réussie ! Vous êtes maintenant connecté.');
+                    window.location.href = '/profile';
                 } else {
                     errorMsg.textContent = data.error || 'Erreur lors de l\'inscription.';
                 }

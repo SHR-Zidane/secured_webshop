@@ -16,7 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json().catch(() => ({}));
 
                 if (res.ok) {
-                    try { localStorage.setItem('user', JSON.stringify(data.user)); } catch (err) {}
+                    // Stocker le token JWT et les données utilisateur
+                    try {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                    } catch (err) {
+                        console.error('Erreur lors du stockage du token:', err);
+                    }
                     window.location.href = '/profile';
                 } else {
                     alert(data.error || 'Erreur lors de la connexion.');
