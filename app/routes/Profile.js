@@ -5,7 +5,6 @@ const router     = express.Router();
 const auth       = require('../middleware/auth');
 const controller = require('../controllers/ProfileController');
 
-// Configuration de multer pour l'upload de photos
 const storage = multer.diskStorage({
     destination: path.join(__dirname, '../public/uploads'),
     filename: (_req, file, cb) => {
@@ -15,7 +14,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Toutes les routes de profil nécessitent une authentification JWT
 router.get('/',      auth, controller.get);
 router.post('/',     auth, controller.update);
 router.post('/photo', auth, upload.single('photo'), controller.uploadPhoto);
