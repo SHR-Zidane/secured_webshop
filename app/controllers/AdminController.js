@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { decrypt } = require('../utils/crypto');
 
 module.exports = {
 
@@ -10,7 +11,12 @@ module.exports = {
             if (err) {
                 return res.status(500).json({ error: 'Erreur serveur' });
             }
-            res.json(results);
+            const users = results.map(u => {
+                u.address = decrypt(u.address);
+                u.email = decrypt(u.email);
+                return u;
+            });
+            res.json(users);
         });
     }
 };

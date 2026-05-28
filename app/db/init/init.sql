@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS products (
 -- Données de départ
 -- ---------------------------------------------------------------
 INSERT INTO users (username, email, password, role, address) VALUES
-    ('admin',  'admin@webshop.com', 'admin123',  'admin', '1 Rue de la Paix, 1000 Lausanne'),
-    ('alice',  'alice@webshop.com', 'password1', 'user',  '42 Avenue des Alpes, 1200 Genève');
+    ('admin',  'admin@webshop.com', 'admin123',  'admin', NULL),
+    ('alice',  'alice@webshop.com', 'password1', 'user',  NULL);
 
 INSERT INTO products (name, description, price, image_url) VALUES
     (

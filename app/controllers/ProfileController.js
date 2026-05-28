@@ -1,5 +1,6 @@
 const path = require('path');
 const db = require('../config/db');
+const { encrypt, decrypt } = require('../utils/crypto');
 
 module.exports = {
 
@@ -16,7 +17,10 @@ module.exports = {
             if (results.length === 0) {
                 return res.status(404).json({ error: 'Utilisateur introuvable' });
             }
-            res.json(results[0]);
+            const user = results[0];
+            user.address = decrypt(user.address);
+            user.email = decrypt(user.email);
+            res.json(user);
         });
     },
 
@@ -27,7 +31,9 @@ module.exports = {
         const userId = req.user.id;
         const { address } = req.body;
 
-        db.query('UPDATE users SET address = ? WHERE id = ?', [address, userId], (err) => {
+        const encryptedAddress = encrypt(address);
+
+        db.query('UPDATE users SET address = ? WHERE id = ?', [encryptedAddress, userId], (err) => {
             if (err) {
                 return res.status(500).json({ error: 'Erreur serveur' });
             }
