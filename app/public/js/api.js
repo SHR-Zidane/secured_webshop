@@ -82,7 +82,14 @@ async function apiCall(url, options = {}) {
     }
 }
 
+function escapeHtml(str) {
+    if (str == null) return '';
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+}
+
 // Export des fonctions
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { getToken, isLoggedIn, getUser, logout, apiCall };
+    module.exports = { getToken, isLoggedIn, getUser, logout, apiCall, escapeHtml };
 }

@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         tbody.innerHTML = users.map(u => `
             <tr>
                 <td>${u.id}</td>
-                <td>${u.username}</td>
-                <td>${u.email}</td>
-                <td><span class="badge-${u.role}">${u.role}</span></td>
-                <td>${u.address || '-'}</td>
+                <td>${escapeHtml(u.username)}</td>
+                <td>${escapeHtml(u.email)}</td>
+                <td><span class="badge-${escapeHtml(u.role)}">${escapeHtml(u.role)}</span></td>
+                <td>${escapeHtml(u.address) || '-'}</td>
             </tr>
         `).join('');
     } catch (err) {
