@@ -10,3 +10,6 @@
 /app/public/uploads/*.webp
 
 .env
+
+# Certificats SSL (ne jamais commiter)
+/app/certs/
