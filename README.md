@@ -115,6 +115,14 @@ Les adresses postales et les emails des utilisateurs sont désormais chiffrés d
 - **Migration** : un script `scripts/migrate-encrypt.js` permet de chiffrer les anciennes données déjà présentes dans la base (utile si la base existait avant cette modification).
 - **Compatibilité** : le système détecte automatiquement si une donnée est en clair (ancien format), chiffrée avec l'ancien format ou avec le nouveau format, et la traite correctement.
 
+Suite à la demande de l'enseignant j'ai dû écrire une explication vulgarisée via schéma :
+
+**à l'enregistrement :**
+<img width="400" height="" alt="register" src="img/register.jfif">
+
+**à la connexion :**
+<img width="400" height="" alt="login" src="img/login.jfif">
+
 ---
 
 ### 19. Protection XSS
