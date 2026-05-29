@@ -136,6 +136,8 @@ npm a ajouté les packages nécessaires pour corriger les vulnérabilités.
 
 ---
 
+## 6.3 Activités moyennes
+
 ### 15. Limitation des tentatives de login (brute-force)
 
 **Fichier :** `app/routes/Auth.js`
