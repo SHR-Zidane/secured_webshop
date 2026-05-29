@@ -118,9 +118,11 @@ Les adresses postales et les emails des utilisateurs sont désormais chiffrés d
 Suite à la demande de l'enseignant j'ai dû écrire une explication vulgarisée via schéma :
 
 **à l'enregistrement :**
+
 <img width="400" height="" alt="register" src="img/register.jfif">
 
 **à la connexion :**
+
 <img width="400" height="" alt="login" src="img/login.jfif">
 
 ---
