@@ -92,7 +92,49 @@ Le site fonctionnait uniquement en HTTP (non chiffré). J'ai mis en place le HTT
 
 ---
 
-## 6.3 Activités moyennes
+### 12.	Effectuer un audit des dépendances NPM, corriger et documenter la correction
+
+**Fichier :** `package-lock.json`
+
+Quand on fait npm i , npm affiche la liste des packages installés et les vulnérabilités trouvées :
+``` bash
+λ npm i
+
+removed 5 packages, changed 3 packages, and audited 171 packages in 2s
+
+21 packages are looking for funding
+  run `npm fund` for details
+
+11 vulnerabilities (3 low, 2 moderate, 6 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.16.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.16.0
+npm notice To update run: npm install -g npm@11.16.0
+npm notice
+```
+
+En utilisant `npm audit fix`, les vulnérabilités sont corrigées automatiquement.
+
+``` bash
+C:\Users\pd01wvj\Documents\secured_webshop\app (main -> origin) (mon_application@1.0.0)
+λ npm audit fix
+
+added 9 packages, removed 5 packages, changed 25 packages, and audited 175 packages in 3s
+
+24 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+```
+
+npm a ajouté les packages nécessaires pour corriger les vulnérabilités.
+
+---
 
 ### 15. Limitation des tentatives de login (brute-force)
 
