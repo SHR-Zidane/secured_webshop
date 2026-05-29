@@ -1,0 +1,41 @@
+JOURNAL DE TRAVAIL
+Nom : Zidane Sahraoui
+Module : 183
+Projet : P_183 : Sécurité des applications
+
+27 mars 2026
+- Ajout des pages Login et profil (90 min)
+- Amélioration du Login (45 min)
+- Ajout de la page Register (75 min)
+Total : 3h30
+
+24 avril 2026
+- Implémentation des points 2 à 6 (180 min)
+Total : 3h00
+
+1 mai 2026
+- Mise en place du JWT token (120 min)
+Total : 2h00
+
+8 mai 2026
+- Réalisation des points 7 et 8 (120 min)
+Total : 2h00
+
+22 mai 2026
+- Révisions du test (225 min)
+Total : 3h45
+
+28 mai 2026
+- Mise en place du protocole HTTPS et correction de la page profil (90 min)
+- Implémentation de la limite de tentatives de login (rate limiting, point 15) (60 min)
+- Protection contre la faille XSS via `innerHTML` corrigée avec `escapeHtml()` (point 19) (60 min)
+- Ajout du rapport (60 min)
+Total : 4h30
+
+29 mai 2026 
+- Ajout de schémas au rapport (45 min)
+- Suppression de logs dans le terminal (15 min)
+- Mise à jour de `bun.lock` (10 min)
+- Correction de la forme du rapport (45 min)
+- Execution de la commande npm Audit fix (20 min)
+Total : 2h15
